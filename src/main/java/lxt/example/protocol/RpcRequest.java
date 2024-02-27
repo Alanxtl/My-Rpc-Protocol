@@ -1,5 +1,7 @@
 package lxt.example.protocol;
 
+import lombok.Data;
+
 @Data
 public class RpcRequest {
     private String requestId; // 调用编号
