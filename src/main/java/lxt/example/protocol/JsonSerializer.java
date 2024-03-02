@@ -2,14 +2,15 @@ package lxt.example.protocol;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lxt.core.serialize.Serializer;
 
 import java.io.IOException;
 
-public class JsonSerialization implements Serialization{
+public class JsonSerializer implements Serializer {
 
     private ObjectMapper objectMapper;
 
-    public JsonSerialization() {
+    public JsonSerializer() {
         synchronized(this) {
             objectMapper = new ObjectMapper();
         }

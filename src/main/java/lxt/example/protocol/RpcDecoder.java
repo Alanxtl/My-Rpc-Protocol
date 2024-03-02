@@ -3,17 +3,18 @@ package lxt.example.protocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import lxt.core.serialize.Serializer;
 
 import java.util.List;
 
 public class RpcDecoder extends ByteToMessageDecoder {
 
     private Class<?> genericClass;
-    private Serialization serialization;
+    private Serializer serializer;
 
-    public RpcDecoder(Class<?> genericClass, Serialization serialization) {
+    public RpcDecoder(Class<?> genericClass, Serializer serializer) {
         this.genericClass = genericClass;
-        this.serialization = serialization;
+        this.serializer = serializer;
     }
 
     @Override
@@ -32,7 +33,7 @@ public class RpcDecoder extends ByteToMessageDecoder {
 
         byte[] data = new byte[dataLength];
         byteBuf.readBytes(data);
-        Object obj = serialization.deserialize(data, genericClass);
+        Object obj = serializer.deserialize(data, genericClass);
 
         list.add(obj);
     }
