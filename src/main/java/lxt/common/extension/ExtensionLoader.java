@@ -18,6 +18,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Slf4j
 public final class ExtensionLoader<T> {
+    private static final String FULL_SERVICE_DIRECTORY = "src/main/resources/META-INF/extensions/";
     private static final String SERVICE_DIRECTORY = "META-INF/extensions/";
     private static final Map<Class<?>, ExtensionLoader<?>> EXTENSION_LOADERS = new ConcurrentHashMap<>();
     private static final Map<Class<?>, Object> EXTENSION_INSTANCES = new ConcurrentHashMap<>();
@@ -27,9 +28,17 @@ public final class ExtensionLoader<T> {
     private static final Holder<Map<String, Class<?>>> cachedClasses = new Holder<>();
 
     static {
+        synchronized (cachedClasses) { // double check
+            Map<String, Class<?>> classes = cachedClasses.value;
+            if ( !Optional.ofNullable(classes).isPresent() ) {
+                classes = new HashMap<>();
+                cachedClasses.value = classes;
+            }
+        }
+
         // 加载默认资源目录
         try {
-            loadDefaultDirectories();
+            loadDefaultResources();
         } catch (IOException e) {
             throw new RuntimeException("Failed to load default directories", e);
         }
@@ -99,7 +108,7 @@ public final class ExtensionLoader<T> {
                 EXTENSION_INSTANCES.putIfAbsent(clazz, clazz.newInstance());
                 instance = (T) EXTENSION_INSTANCES.get(clazz);
             } catch (Exception e) {
-                log.error("Fail to create instance of extension " + clazz + ", cause: " + e.getMessage(), e);
+                log.error("Fail to create instance of extension " + clazz + "\n Caused by: " + e.getMessage());
             }
         }
 
@@ -137,55 +146,74 @@ public final class ExtensionLoader<T> {
                 }
             }
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.error("Unable to locate the file " + fileName + "\n Caused by: " + e.getMessage());
         }
     }
 
-    private static void loadDefaultDirectories() throws IOException {
+    private static void loadDefaultResources() throws IOException {
         ClassLoader classLoader = ExtensionLoader.class.getClassLoader();
-        File folder = new File(ExtensionLoader.SERVICE_DIRECTORY);
+        File folder = new File(ExtensionLoader.FULL_SERVICE_DIRECTORY);
         File[] files = folder.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (file.isFile()) {
-                    loadResource(cachedClasses.value, classLoader, new URL(file.getName()));
+
+        if ( Optional.ofNullable(files).isPresent() ) {
+            for ( File file : files ) {
+                String fileName = SERVICE_DIRECTORY + file.getName();
+
+                Enumeration<URL> urls = classLoader.getResources(fileName);
+
+                if (urls != null) {
+                    while (urls.hasMoreElements()) {
+                        URL resourceUrl = urls.nextElement();
+                        loadResource(cachedClasses.value, classLoader, resourceUrl);
+                    }
                 }
             }
         }
 
+
+
+
+
     }
 
-    private static void loadResource(Map<String, Class<?>> extensionClasses, ClassLoader classLoader, URL resourceUrl) throws IOException {
+    private static void loadResource(Map<String, Class<?>> extensionClasses, ClassLoader classLoader, URL resourceUrl) {
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(resourceUrl.openStream(), UTF_8))) {
-            String line;
-            // read every line
-            while ((line = reader.readLine()) != null) {
-                // get index of comment
-                final int ci = line.indexOf('#');
-                if (ci >= 0) {
-                    // string after # is comment so we ignore it
-                    line = line.substring(0, ci);
+            // 逐行加载
+            while ( reader.ready() ) {
+                String line = reader.readLine();
+                if ( line.contains("#") ) {
+                    // 忽略注释
+                    line = line.substring(0, line.indexOf('#'));
                 }
+
                 line = line.trim();
-                if (!line.isEmpty()) {
+                if ( !line.isEmpty() ) {
+
+                    final int ei = line.indexOf('=');
+                    String name = line.substring(0, ei).trim();
+                    String clazzName = line.substring(ei + 1).trim();
+
                     try {
-                        final int ei = line.indexOf('=');
-                        String name = line.substring(0, ei).trim();
-                        String clazzName = line.substring(ei + 1).trim();
-                        // our SPI use key-value pair so both of them must not be empty
-                        if (!name.isEmpty() && !clazzName.isEmpty()) {
+                        // 将等号左右两边插入缓存
+                        if ( !name.isEmpty() && !clazzName.isEmpty() ) {
                             Class<?> clazz = classLoader.loadClass(clazzName);
                             extensionClasses.put(name, clazz);
                         }
-                    } catch (ClassNotFoundException e) {
-                        log.error(e.getMessage());
+                    } catch ( ClassNotFoundException e ) {
+                        log.error("Unable to find the class " + clazzName + "\n Caused by: " + e.getMessage());
                     }
                 }
 
             }
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.error("Unable to read the file " + resourceUrl + "\n Caused by: " + e.getMessage());
         }
+    }
+
+    public static void main(String[] args) {
+        ExtensionLoader extensionLoader = new ExtensionLoader(ExtensionLoader.class);
+        System.out.println(ExtensionLoader.cachedClasses.value);
     }
 
 }

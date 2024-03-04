@@ -1,14 +1,15 @@
-package lxt.core.serialize;
+package lxt.core.serialize.protostuff;
 
 import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtostuffIOUtil;
 import io.protostuff.Schema;
 import io.protostuff.runtime.RuntimeSchema;
+import lxt.core.serialize.Serializer;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ProtostuffSerializer implements Serializer{
+public class ProtostuffSerializer implements Serializer {
 
     private static final LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
     private static final Map<Class<?>, Schema<?>> schemaCache = new ConcurrentHashMap<>();

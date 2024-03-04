@@ -1,2 +1,0 @@
-netty=lxt.core.remoting.transport.netty.client.NettyRpcClient
-socket=lxt.core.remoting.transport.socket.SocketRpcClient

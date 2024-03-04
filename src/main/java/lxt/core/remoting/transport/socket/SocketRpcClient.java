@@ -1,6 +1,8 @@
 package lxt.core.remoting.transport.socket;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import lxt.common.extension.ExtensionLoader;
@@ -8,6 +10,7 @@ import lxt.core.registry.ServiceDiscovery;
 import lxt.core.remoting.dtos.RpcRequest;
 import lxt.core.remoting.transport.RpcRequestTransport;
 
+@AllArgsConstructor
 @Builder
 @Slf4j
 public class SocketRpcClient implements RpcRequestTransport {

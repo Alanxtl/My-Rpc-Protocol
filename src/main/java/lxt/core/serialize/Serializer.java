@@ -1,5 +1,8 @@
 package lxt.core.serialize;
 
+import lxt.common.extension.SPI;
+
+@SPI
 public interface Serializer {
     // TODO: 序列化框架：
     //  protobuf
