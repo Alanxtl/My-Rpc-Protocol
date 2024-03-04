@@ -10,5 +10,6 @@ public interface Serializer {
     //  kyro
     //  Hessian
     <T> byte[] serialize(T obj);
+
     <T> T deserialize(byte[] bytes, Class<T> clazz);
 }

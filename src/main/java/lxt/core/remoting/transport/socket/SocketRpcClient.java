@@ -2,13 +2,17 @@ package lxt.core.remoting.transport.socket;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import lxt.common.extension.ExtensionLoader;
 import lxt.core.registry.ServiceDiscovery;
 import lxt.core.remoting.dtos.RpcRequest;
 import lxt.core.remoting.transport.RpcRequestTransport;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 
 @AllArgsConstructor
 @Builder
@@ -23,6 +27,23 @@ public class SocketRpcClient implements RpcRequestTransport {
 
     @Override
     public Object sendRpcRequest(RpcRequest rpcRequest) {
-        return null;
+        InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcRequest);
+        try (Socket socket = new Socket()) {
+            socket.connect(inetSocketAddress);
+            // 使用outputStream向server传递object
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+            objectOutputStream.writeObject(rpcRequest);
+            // 使用inputStream读取RpcResponse
+            ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+            return objectInputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException("Unable to send the rpc request.", e);
+        }
+    }
+
+    public static void main(String[] args) {
+        SocketRpcClient socketRpcClient = new SocketRpcClient();
+        RpcRequest rpcRequest = new RpcRequest();
+        socketRpcClient.sendRpcRequest(rpcRequest);
     }
 }
