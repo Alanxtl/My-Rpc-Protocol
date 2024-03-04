@@ -1,0 +1,1 @@
+loadBalance=lxt.core.loadbalance.loadbalancer.ConsistentHashLoadBalance
