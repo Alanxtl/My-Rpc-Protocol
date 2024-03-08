@@ -1,0 +1,2 @@
+netty=rpc.core.remoting.transport.netty.client.NettyRpcClient
+socket=rpc.core.remoting.transport.socket.SocketRpcClient

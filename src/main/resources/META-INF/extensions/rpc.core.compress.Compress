@@ -1,0 +1,1 @@
+gzip=rpc.core.compress.gzip.GzipCompress

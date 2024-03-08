@@ -1,3 +1,0 @@
-kyro=lxt.core.serialize.kyro.KryoSerializer
-protostuff=lxt.core.serialize.protostuff.ProtostuffSerializer
-hessian=lxt.core.serialize.hessian.HessianSerializer
