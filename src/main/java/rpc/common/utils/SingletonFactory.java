@@ -1,4 +1,4 @@
-package rpc.common.factory;
+package rpc.common.utils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
@@ -22,7 +22,8 @@ public class SingletonFactory {
                 targetObject = clazz.getDeclaredConstructor().newInstance();
                 cacheObject.putIfAbsent(clazz, targetObject);
                 return targetObject;
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                     NoSuchMethodException e) {
                 throw new RuntimeException(e);
             }
         }

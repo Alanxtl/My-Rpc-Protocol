@@ -1,1 +1,2 @@
-loadBalance=rpc.core.loadbalance.loadbalancer.ConsistentHashLoadBalance
+consistentHashLoadBalance=rpc.core.loadbalance.loadbalancer.ConsistentHashLoadBalance
+randomLoadBalance=rpc.core.loadbalance.loadbalancer.RandomLoadBalance

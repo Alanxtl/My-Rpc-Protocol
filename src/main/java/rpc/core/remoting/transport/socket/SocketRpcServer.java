@@ -2,10 +2,10 @@ package rpc.core.remoting.transport.socket;
 
 
 import lombok.extern.slf4j.Slf4j;
-import rpc.common.factory.SingletonFactory;
-import rpc.common.utils.concurrent.ThreadPoolFactoryUtil;
-import rpc.core.config.CustomShutdownHook;
-import rpc.core.config.RpcServiceConfig;
+import rpc.common.utils.SingletonFactory;
+import rpc.common.utils.ThreadPoolFactoryUtil;
+import rpc.core.remoting.transport.CustomShutdownHook;
+import rpc.core.provider.RpcServiceConfig;
 import rpc.core.provider.ServiceProvider;
 import rpc.core.provider.zk.ZkServiceProvider;
 
@@ -17,7 +17,7 @@ import java.net.Socket;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 
-import static rpc.core.remoting.transport.RpcRequestTransport.PORT;
+import static rpc.common.configs.RpcConfig.RPC_SERVER_PORT;
 
 @Slf4j
 public class SocketRpcServer {
@@ -36,7 +36,7 @@ public class SocketRpcServer {
     public void start() {
         try (ServerSocket server = new ServerSocket()) {
             String host = InetAddress.getLocalHost().getHostAddress();
-            server.bind(new InetSocketAddress(host, PORT));
+            server.bind(new InetSocketAddress(host, RPC_SERVER_PORT));
             SingletonFactory.getSingleton(CustomShutdownHook.class).clearAll();
             Socket socket;
             while (Optional.ofNullable(socket = server.accept()).isPresent()) {
@@ -47,6 +47,11 @@ public class SocketRpcServer {
         } catch (IOException e) {
             log.error("Caught IOException when starting rpc server:", e);
         }
+    }
+
+    public static void main(String[] args) {
+        SocketRpcServer socketRpcServer = new SocketRpcServer();
+        socketRpcServer.start();
     }
 
 

@@ -110,10 +110,10 @@ public final class ExtensionLoader<T> {
                         if (!name.isEmpty() && !clazzName.isEmpty()) {
                             Class<?> clazz = classLoader.loadClass(clazzName);
                             extensionClasses.put(name, clazz);
-                            log.info("Load class: " + name + " Class name: " + clazzName);
+                            log.debug("Load class: [" + name + "], class name: [" + clazzName + "]");
                         }
                     } catch (ClassNotFoundException e) {
-                        log.warn("Unable to find the class " + clazzName + "\n Caused by: " + e.getMessage());
+                        log.warn("Unable to find class [" + clazzName + "], caused by: " + e.getMessage());
                     }
                 }
             }

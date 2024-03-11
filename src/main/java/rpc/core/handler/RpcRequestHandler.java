@@ -2,7 +2,7 @@ package rpc.core.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import rpc.common.exception.RpcException;
-import rpc.common.factory.SingletonFactory;
+import rpc.common.utils.SingletonFactory;
 import rpc.core.provider.ServiceProvider;
 import rpc.core.provider.zk.ZkServiceProvider;
 import rpc.core.remoting.dtos.RpcRequest;

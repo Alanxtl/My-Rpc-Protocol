@@ -1,4 +1,4 @@
-package rpc.example.protocol;
+package rpc.core.serialize.jackson;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,12 +6,12 @@ import rpc.core.serialize.Serializer;
 
 import java.io.IOException;
 
-public class JsonSerializer implements Serializer {
+public class JacksonSerializer implements Serializer {
 
     private ObjectMapper objectMapper;
 
-    public JsonSerializer() {
-        synchronized(this) {
+    public JacksonSerializer() {
+        synchronized (this) {
             objectMapper = new ObjectMapper();
         }
 //        objectMapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);

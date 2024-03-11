@@ -6,6 +6,11 @@ import java.net.InetSocketAddress;
 
 @SPI
 public interface ServiceRegistry {
-    // 服务注册类接口
+
+    /**
+    * 注册服务到注册中心
+    * @param rpcServiceName 完整的请求类（关键请求信息为 name+group+version）
+    * @param inetSocketAddress 远程服务地址
+    */
     void registerService(String rpcServiceName, InetSocketAddress inetSocketAddress);
 }

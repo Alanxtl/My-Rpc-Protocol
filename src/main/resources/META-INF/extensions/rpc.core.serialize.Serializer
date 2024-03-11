@@ -1,3 +1,4 @@
 kyro=rpc.core.serialize.kyro.KryoSerializer
 protostuff=rpc.core.serialize.protostuff.ProtostuffSerializer
+jackson=rpc.core.serialize.jackson.JacksonSerializer
 hessian=rpc.core.serialize.hessian.HessianSerializer

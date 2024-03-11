@@ -1,7 +1,8 @@
-package rpc.common.utils.concurrent;
+package rpc.common.utils;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.slf4j.Slf4j;
+import rpc.common.configs.ThreadPoolConfig;
 
 import java.util.Map;
 import java.util.Optional;
@@ -12,7 +13,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ThreadPoolFactoryUtil {
     private static final Map<String, ExecutorService> THREAD_POOLS = new ConcurrentHashMap<>();
 
-    private ThreadPoolFactoryUtil() {}
+    private ThreadPoolFactoryUtil() {
+    }
 
     public static ExecutorService createCustomThreadPoolIfAbsent(String threadName) {
         ThreadPoolConfig config = new ThreadPoolConfig();
@@ -126,7 +128,6 @@ public class ThreadPoolFactoryUtil {
         log.info("========================================");
 
 
-
     }
 
     public static void main(String[] args) {
@@ -136,7 +137,7 @@ public class ThreadPoolFactoryUtil {
         ThreadPoolFactoryUtil.printAllThreadPoolStatus();
         ThreadPoolFactoryUtil.shutDownAllThreadPool();
         ThreadPoolFactoryUtil.printAllThreadPoolStatus();
-        
+
     }
 }
 

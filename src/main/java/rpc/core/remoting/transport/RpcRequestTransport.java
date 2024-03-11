@@ -6,7 +6,6 @@ import rpc.core.remoting.dtos.RpcRequest;
 
 @SPI
 public interface RpcRequestTransport {
-    int PORT = 9998;
 
     Object sendRpcRequest(RpcRequest rpcRequest);
 }

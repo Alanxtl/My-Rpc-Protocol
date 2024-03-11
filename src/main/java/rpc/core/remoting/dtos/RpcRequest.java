@@ -26,7 +26,7 @@ public class RpcRequest implements Serializable {
     }
 
     public static void main(String[] args) {
-        RpcRequest rpcRequest = RpcRequest.builder().requestId("123").className("rpc").methodName("rpc").parameterTypes(new Class<?>[0]).parameters(new Object[0]).version("1.0").group("rpc").build();
+        RpcRequest rpcRequest = RpcRequest.builder().requestId("123").interfaceName("rpc").methodName("rpc").parameterTypes(new Class<?>[0]).parameters(new Object[0]).version("1.0").group("rpc").build();
         System.out.println(rpcRequest.toString());
     }
 }

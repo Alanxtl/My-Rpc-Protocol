@@ -3,6 +3,8 @@ package rpc.core.remoting.transport.socket;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
+import rpc.common.configs.ZkConfig;
+import rpc.common.enums.extensionEnums.SerializerExtensionEnum;
 import rpc.common.extension.ExtensionLoader;
 import rpc.core.registry.ServiceDiscovery;
 import rpc.core.remoting.dtos.RpcRequest;
@@ -23,7 +25,7 @@ public class SocketRpcClient implements RpcRequestTransport {
     private final ServiceDiscovery serviceDiscovery;
 
     public SocketRpcClient() {
-        this.serviceDiscovery = ExtensionLoader.getExtensionLoader(ServiceDiscovery.class).getExtension("zk");
+        this.serviceDiscovery = ExtensionLoader.getExtensionLoader(ServiceDiscovery.class).getExtension(ZkConfig.ZK_SERVICE_DISCOVERY);
     }
 
     @Override
@@ -47,7 +49,7 @@ public class SocketRpcClient implements RpcRequestTransport {
 //        RpcRequest rpcRequest = new RpcRequest();
 //        socketRpcClient.sendRpcRequest(rpcRequest);
 
-        Serializer s = ExtensionLoader.getExtensionLoader(Serializer.class).getExtension("protostuff");
+        Serializer s = ExtensionLoader.getExtensionLoader(Serializer.class).getExtension(SerializerExtensionEnum.PROTOSTUFF.serviceName);
         System.out.println(s);
 
     }

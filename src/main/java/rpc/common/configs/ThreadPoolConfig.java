@@ -1,4 +1,4 @@
-package rpc.common.utils.concurrent;
+package rpc.common.configs;
 
 import lombok.Data;
 

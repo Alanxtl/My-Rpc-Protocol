@@ -1,4 +1,4 @@
-package rpc.core.config;
+package rpc.core.provider;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package rpc.example;
+package rpc;
 
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
