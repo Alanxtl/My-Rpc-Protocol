@@ -122,6 +122,7 @@ public final class ExtensionLoader<T> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public T getExtension(String name) {
         if (!Optional.ofNullable(name).isPresent() || name.isEmpty()) {
             throw new IllegalArgumentException("Extension name should not be null or empty");
@@ -149,6 +150,7 @@ public final class ExtensionLoader<T> {
         return (T) instance;
     }
 
+    @SuppressWarnings("unchecked")
     private T createExtension(String name) {
         // 加载所有的T类 并使用name返回指定的类
         Class<?> clazz = getExtensionClasses().get(name);

@@ -26,10 +26,13 @@ public class RpcRequestHandler {
             Method method = rpcRequest.getClass().getMethod(rpcRequest.getMethodName(), rpcRequest.getParameterTypes());
             result = method.invoke(service, rpcRequest.getParameters());
             log.info("Service [{}] successfully invoke method [{}]", rpcRequest.getRpcServiceName(), rpcRequest.getMethodName());
-        } catch (NoSuchMethodException | IllegalArgumentException | InvocationTargetException |
-                 IllegalAccessException e) {
+        } catch (NoSuchMethodException | IllegalArgumentException | IllegalAccessException e) {
             throw new RpcException("Error occurred when Service [" + rpcRequest.getRpcServiceName() +
                     "] trying to invoke method [" + rpcRequest.getMethodName() + "]", e);
+        } catch (InvocationTargetException e) {
+            log.warn("Service [{}] successfully invoke method [{}], the method caught exception [{}]",
+                    rpcRequest.getRpcServiceName(), rpcRequest.getMethodName(), e.getCause().getMessage());
+            return e.getCause();
         }
         return result;
     }
