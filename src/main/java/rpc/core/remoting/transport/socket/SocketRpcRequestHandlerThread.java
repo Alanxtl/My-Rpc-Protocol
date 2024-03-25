@@ -1,10 +1,13 @@
 package rpc.core.remoting.transport.socket;
 
 import lombok.extern.slf4j.Slf4j;
+import rpc.common.enums.extensionEnums.SerializerExtensionEnum;
+import rpc.common.extension.ExtensionLoader;
 import rpc.common.utils.SingletonFactory;
 import rpc.core.handler.RpcRequestHandler;
 import rpc.core.remoting.dtos.RpcRequest;
 import rpc.core.remoting.dtos.RpcResponse;
+import rpc.core.serialize.Serializer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,10 +18,12 @@ import java.net.Socket;
 public class SocketRpcRequestHandlerThread implements Runnable {
     private final Socket socket;
     private final RpcRequestHandler rpcRequestHandler;
+    private final Serializer serializer;
 
     public SocketRpcRequestHandlerThread(Socket socket) {
         this.socket = socket;
         this.rpcRequestHandler = SingletonFactory.getSingleton(RpcRequestHandler.class);
+        this.serializer = ExtensionLoader.getExtensionLoader(Serializer.class).getExtension(SerializerExtensionEnum.PROTOSTUFF.serviceName);
     }
 
     @Override

@@ -4,7 +4,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import rpc.common.enums.RpcExceptionEnum;
 import rpc.common.exception.RpcException;
-import rpc.core.provider.RpcServiceConfig;
+import rpc.core.provider.TargetRpcService;
 import rpc.core.remoting.dtos.RpcRequest;
 import rpc.core.remoting.dtos.RpcResponse;
 import rpc.core.remoting.transport.RpcRequestTransport;
@@ -21,16 +21,16 @@ import java.util.concurrent.CompletableFuture;
 public class RpcClientProxy implements InvocationHandler {
 
     private final RpcRequestTransport rpcRequestTransport;
-    private final RpcServiceConfig rpcServiceConfig;
+    private final TargetRpcService targetRpcService;
 
-    public RpcClientProxy(RpcRequestTransport rpcRequestTransport, RpcServiceConfig rpcServiceConfig) {
+    public RpcClientProxy(RpcRequestTransport rpcRequestTransport, TargetRpcService targetRpcService) {
         this.rpcRequestTransport = rpcRequestTransport;
-        this.rpcServiceConfig = rpcServiceConfig;
+        this.targetRpcService = targetRpcService;
     }
 
     public RpcClientProxy(RpcRequestTransport rpcRequestTransport) {
         this.rpcRequestTransport = rpcRequestTransport;
-        this.rpcServiceConfig = new RpcServiceConfig();
+        this.targetRpcService = new TargetRpcService();
     }
 
     @SuppressWarnings("unchecked")
@@ -49,8 +49,8 @@ public class RpcClientProxy implements InvocationHandler {
                 .parameterTypes(method.getParameterTypes())
                 .interfaceName(method.getDeclaringClass().getName())
                 .requestId(UUID.randomUUID().toString())
-                .group(rpcServiceConfig.getGroup())
-                .version(rpcServiceConfig.getVersion())
+                .group(targetRpcService.getGroup())
+                .version(targetRpcService.getVersion())
                 .build();
         RpcResponse<Object> rpcResponse = null;
 

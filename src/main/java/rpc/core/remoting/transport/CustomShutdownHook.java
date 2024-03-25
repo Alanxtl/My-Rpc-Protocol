@@ -12,7 +12,7 @@ import java.net.UnknownHostException;
 @Slf4j
 public class CustomShutdownHook {
     // 单例通过SingletonFactory获取
-    private CustomShutdownHook() {
+    public CustomShutdownHook() {
     }
 
     public void clearAll() {

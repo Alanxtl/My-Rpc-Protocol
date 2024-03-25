@@ -5,7 +5,7 @@ import rpc.common.configs.ZkConfig;
 import rpc.common.enums.RpcExceptionEnum;
 import rpc.common.exception.RpcException;
 import rpc.common.extension.ExtensionLoader;
-import rpc.core.provider.RpcServiceConfig;
+import rpc.core.provider.TargetRpcService;
 import rpc.core.provider.ServiceProvider;
 import rpc.core.registry.ServiceRegistry;
 
@@ -33,18 +33,22 @@ public class ZkServiceProvider implements ServiceProvider {
     }
 
     @Override
-    public void addService(RpcServiceConfig rpcServiceConfig) {
-        String serviceName = rpcServiceConfig.getServiceName();
+    public void addService(TargetRpcService targetRpcService) {
+        String serviceName = targetRpcService.getRpcServiceName();
         if (registeredService.contains(serviceName)) {
             return;
         }
         registeredService.add(serviceName);
-        serviceMap.put(serviceName, rpcServiceConfig.getService());
-        log.info("Add service: [{}] and interfaces: [{}]", serviceName, rpcServiceConfig.getService().getClass().getInterfaces());
+        serviceMap.put(serviceName, targetRpcService.getService());
+        log.info("Add service: <{}, {}>", serviceName, targetRpcService.getService().getClass());
     }
 
     @Override
     public Object getService(String rpcServiceName) {
+        if (!Optional.ofNullable(rpcServiceName).isPresent() || rpcServiceName.isEmpty()) {
+            throw new RpcException("Empty or null rpc service name");
+        }
+
         Object service = serviceMap.get(rpcServiceName);
         if (Optional.ofNullable(service).isPresent()) {
             return service;
@@ -54,11 +58,11 @@ public class ZkServiceProvider implements ServiceProvider {
     }
 
     @Override
-    public void publishService(RpcServiceConfig rpcServiceConfig) {
+    public void publishService(TargetRpcService targetRpcService) {
         try {
             String host = InetAddress.getLocalHost().getHostAddress();
-            this.addService(rpcServiceConfig);
-            serviceRegistry.registerService(rpcServiceConfig.getRpcServiceName(), new InetSocketAddress(host, RPC_SERVER_PORT));
+            this.addService(targetRpcService);
+            serviceRegistry.registerService(targetRpcService.getRpcServiceName(), new InetSocketAddress(host, RPC_SERVER_PORT));
         } catch (UnknownHostException e) {
             log.error("Cannot get host address", e);
         }

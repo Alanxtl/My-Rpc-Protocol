@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum ServiceDiscoveryExtensionEnum {
 
-    ZK("zk");
+    ZK("ZkServiceDiscovery");
 
     public final String serviceName;
 

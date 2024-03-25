@@ -22,7 +22,18 @@ public class PropertiesFileUtil {
         String rpcConfigPath = "";
         if (Optional.ofNullable(url).isPresent()) {
             rpcConfigPath = url.getPath() + filename;
+//            System.out.println(rpcConfigPath);
         }
+
+        StringBuilder sb = new StringBuilder(rpcConfigPath);
+        for( int i = 0; i < 3; i++ ) { //用以删除windows目录中的":"符号 如"/C:/Users/..." 中的冒号
+            if( sb.charAt(i) == ':' ) {
+                sb.deleteCharAt(i);
+            }
+        }
+
+        rpcConfigPath = sb.toString();
+
         Properties properties = null;
         try (InputStreamReader inputStreamReader =
                      new InputStreamReader(Files.newInputStream(Paths.get(rpcConfigPath)),
@@ -30,7 +41,8 @@ public class PropertiesFileUtil {
             properties = new Properties();
             properties.load(inputStreamReader);
         } catch (IOException e) {
-            log.error("Cannot read properties file [{}]", filename);
+            log.warn("Properties file [{}] not found", filename);
+            return null;
         }
         return properties;
     }

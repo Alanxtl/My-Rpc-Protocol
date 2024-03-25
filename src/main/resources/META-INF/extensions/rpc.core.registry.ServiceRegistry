@@ -1,1 +1,1 @@
-zk=rpc.core.registry.zk.ZkServiceRegistry
+ZkServiceRegistry=rpc.core.registry.zk.ZkServiceRegistry

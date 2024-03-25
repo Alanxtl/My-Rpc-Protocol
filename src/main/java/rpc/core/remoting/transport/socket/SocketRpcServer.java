@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import rpc.common.utils.SingletonFactory;
 import rpc.common.utils.ThreadPoolFactoryUtil;
 import rpc.core.remoting.transport.CustomShutdownHook;
-import rpc.core.provider.RpcServiceConfig;
+import rpc.core.provider.TargetRpcService;
 import rpc.core.provider.ServiceProvider;
 import rpc.core.provider.zk.ZkServiceProvider;
 
@@ -29,8 +29,8 @@ public class SocketRpcServer {
         this.serviceProvider = SingletonFactory.getSingleton(ZkServiceProvider.class);
     }
 
-    public void registerService(RpcServiceConfig rpcServiceConfig) {
-        serviceProvider.publishService(rpcServiceConfig);
+    public void registerService(TargetRpcService targetRpcService) {
+        serviceProvider.publishService(targetRpcService);
     }
 
     public void start() {

@@ -75,14 +75,16 @@ public class CuratorUtils {
 
     public static CuratorFramework getZkClient() {
         Properties rpcConfigPath = PropertiesFileUtil.readPropertiesFile(RpcConfig.RPC_CONFIG_PATH);
-        Properties zkAddress = PropertiesFileUtil.readPropertiesFile(RpcConfig.ZK_ADDRESS);
+        Properties zkAddress =  PropertiesFileUtil.readPropertiesFile(RpcConfig.ZK_ADDRESS);
 
         String zooKeeperAddress = "";
         if (Optional.ofNullable(rpcConfigPath).isPresent() && Optional.ofNullable(zkAddress).isPresent()) {
             zooKeeperAddress = zkAddress.toString();
         } else {
-            zooKeeperAddress = ZkConfig.ZK_ADDRESS;
+            zooKeeperAddress = ZkConfig.DEFAULT_ZK_ADDRESS;
         }
+
+        log.info("Connecting to zookeeper server: [{}]", zooKeeperAddress);
 
         if (Optional.ofNullable(zkClient).isPresent() && zkClient.getState() == CuratorFrameworkState.STARTED) {
             return zkClient;

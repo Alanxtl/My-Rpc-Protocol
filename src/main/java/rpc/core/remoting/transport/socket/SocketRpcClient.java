@@ -40,6 +40,7 @@ public class SocketRpcClient implements RpcRequestTransport {
             ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
             return objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
+            log.error("Unable to send the rpc request [{}]", rpcRequest.toString());
             throw new RuntimeException("Unable to send the rpc request.", e);
         }
     }

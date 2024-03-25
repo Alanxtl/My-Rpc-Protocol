@@ -9,13 +9,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RpcServiceConfig {
-    private String version = "";
-    private String group = "";
+public class TargetRpcService {
+
+    /**
+     * 实现类的版本号
+     */
+    private String version = "#";
+    /**
+     * 使用group区分目标服务的不同实现类
+     */
+    private String group = "#";
+    /**
+     * 目标服务
+     */
     private Object service;
 
     public String getRpcServiceName() {
-        return this.getServiceName() + this.getGroup() + this.getVersion();
+        return this.getServiceName() + "/" + this.getGroup() + "/" + this.getVersion();
     }
 
     public String getServiceName() {

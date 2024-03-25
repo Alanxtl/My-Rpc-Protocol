@@ -1,8 +1,8 @@
 package rpc.core.provider;
 
 public interface ServiceProvider {
-    void addService(RpcServiceConfig rpcServiceConfig);
+    void addService(TargetRpcService targetRpcService);
     Object getService(String rpcServiceName);
-    void publishService(RpcServiceConfig rpcServiceConfig);
+    void publishService(TargetRpcService targetRpcService);
 
 }

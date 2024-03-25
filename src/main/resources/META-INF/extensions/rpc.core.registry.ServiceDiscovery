@@ -1,1 +1,1 @@
-zk=rpc.core.registry.zk.ZkServiceDiscovery
+ZkServiceDiscovery=rpc.core.registry.zk.ZkServiceDiscovery
