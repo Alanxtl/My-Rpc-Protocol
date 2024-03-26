@@ -55,3 +55,9 @@ Client-Side (Service User)
   THE_SERVICE_YOU_WANT_TO_IMPLEMENT service = rpcClientProxy.getProxy(ClassTransferTest.class);
   service.doSth();
 ```
+
+## Credit
+
+  - guide-rpc-framework: https://github.com/Snailclimb/guide-rpc-framework
+  - dourpc-remoting: https://xilidou.com/2018/09/26/dourpc-remoting/
+
