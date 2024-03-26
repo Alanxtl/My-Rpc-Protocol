@@ -11,9 +11,9 @@
 
 1. Install Docker on you computer first.
 2. Pull Zookeeper on the docker hub.
-   ```bash
-   docker pull zookeeper:3.5.8
-   ```
+  ```bash
+  docker pull zookeeper:3.5.8
+  ```
 3. This repoistory is developed using Intellij IDEA, not tested with other IDEs.
 4. This repoistory is coded with Lombok annotations, users need to install Lombok plugin to compile successfully.
 
