@@ -1,6 +1,6 @@
 package rpc.core.registry;
 
-import rpc.common.extension.SPI;
+import rpc.core.extension.SPI;
 import rpc.core.remoting.dtos.RpcRequest;
 
 import java.net.InetSocketAddress;

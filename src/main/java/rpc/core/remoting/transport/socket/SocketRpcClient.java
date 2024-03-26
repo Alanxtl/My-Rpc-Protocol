@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import rpc.common.configs.ZkConfig;
 import rpc.common.enums.extensionEnums.SerializerExtensionEnum;
-import rpc.common.extension.ExtensionLoader;
+import rpc.core.extension.ExtensionLoader;
 import rpc.core.registry.ServiceDiscovery;
 import rpc.core.remoting.dtos.RpcRequest;
 import rpc.core.remoting.transport.RpcRequestTransport;
@@ -25,7 +25,7 @@ public class SocketRpcClient implements RpcRequestTransport {
     private final ServiceDiscovery serviceDiscovery;
 
     public SocketRpcClient() {
-        this.serviceDiscovery = ExtensionLoader.getExtensionLoader(ServiceDiscovery.class).getExtension(ZkConfig.ZK_SERVICE_DISCOVERY);
+        this.serviceDiscovery = ExtensionLoader.getExtensionLoader(ServiceDiscovery.class).getExtension(ZkConfig.zkServiceDiscovery);
     }
 
     @Override

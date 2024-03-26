@@ -1,4 +1,4 @@
-package rpc.test.targetClasses;
+package targetClasses;
 
 import lombok.Data;
 

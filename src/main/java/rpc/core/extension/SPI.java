@@ -1,4 +1,4 @@
-package rpc.common.extension;
+package rpc.core.extension;
 
 import java.lang.annotation.*;
 

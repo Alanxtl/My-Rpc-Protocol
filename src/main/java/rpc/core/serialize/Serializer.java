@@ -1,6 +1,6 @@
 package rpc.core.serialize;
 
-import rpc.common.extension.SPI;
+import rpc.core.extension.SPI;
 
 @SPI
 public interface Serializer {

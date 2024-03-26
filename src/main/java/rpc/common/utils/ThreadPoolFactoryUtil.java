@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+
 @Slf4j
 public class ThreadPoolFactoryUtil {
     private static final Map<String, ExecutorService> THREAD_POOLS = new ConcurrentHashMap<>();
@@ -17,20 +18,20 @@ public class ThreadPoolFactoryUtil {
     }
 
     public static ExecutorService createCustomThreadPoolIfAbsent(String threadName) {
-        ThreadPoolConfig config = new ThreadPoolConfig();
-        return createCustomThreadPoolIfAbsent(threadName, config, false);
+        BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(ThreadPoolConfig.BLOCKING_QUEUE_CAPACITY);
+        return createCustomThreadPoolIfAbsent(threadName, workQueue, false);
     }
 
-    public static ExecutorService createCustomThreadPoolIfAbsent(String threadName, ThreadPoolConfig config) {
-        return createCustomThreadPoolIfAbsent(threadName, config, false);
+    public static ExecutorService createCustomThreadPoolIfAbsent(String threadName, BlockingQueue<Runnable> workQueue) {
+        return createCustomThreadPoolIfAbsent(threadName, workQueue, false);
     }
 
-    public static ExecutorService createCustomThreadPoolIfAbsent(String threadName, ThreadPoolConfig config, Boolean daemon) {
-        ExecutorService threadPool = THREAD_POOLS.computeIfAbsent(threadName, k -> createThreadPool(threadName, config, daemon));
+    public static ExecutorService createCustomThreadPoolIfAbsent(String threadName, BlockingQueue<Runnable> workQueue, Boolean daemon) {
+        ExecutorService threadPool = THREAD_POOLS.computeIfAbsent(threadName, k -> createThreadPool(threadName, workQueue, daemon));
 
         if (threadPool.isShutdown() || threadPool.isTerminated()) {
             THREAD_POOLS.remove(threadName);
-            threadPool = createThreadPool(threadName, config, daemon);
+            threadPool = createThreadPool(threadName, workQueue, daemon);
             THREAD_POOLS.put(threadName, threadPool);
         }
 
@@ -58,10 +59,10 @@ public class ThreadPoolFactoryUtil {
         return check.get();
     }
 
-    private static ExecutorService createThreadPool(String threadName, ThreadPoolConfig config, Boolean daemon) {
+    private static ExecutorService createThreadPool(String threadName, BlockingQueue<Runnable> workQueue, Boolean daemon) {
         ThreadFactory threadFactory = createThreadFactory(threadName, daemon);
-        return new ThreadPoolExecutor(config.getCorePoolSize(), config.getMaximumPoolSize(),
-                config.getKeepAliveTime(), config.getUnit(), config.getWorkQueue(), threadFactory);
+        return new ThreadPoolExecutor(ThreadPoolConfig.corePoolSize, ThreadPoolConfig.maximumPoolSize,
+                ThreadPoolConfig.keepAliveTime, ThreadPoolConfig.unit, workQueue, threadFactory);
     }
 
     public static ThreadFactory createThreadFactory(String threadName, Boolean daemon) {

@@ -1,4 +1,4 @@
-package rpc.core.registry.zk.util;
+package rpc.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.RetryPolicy;
@@ -11,7 +11,6 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 import rpc.common.configs.RpcConfig;
 import rpc.common.configs.ZkConfig;
-import rpc.common.utils.PropertiesFileUtil;
 
 import java.net.InetSocketAddress;
 import java.util.*;
@@ -19,13 +18,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-public class CuratorUtils {
+public class CuratorUtil {
 
     private static final Map<String, List<String>> SERVICE_ADDRESS_MAP = new ConcurrentHashMap<>();
     private static final Set<String> REGISTERED_PATH_SET = ConcurrentHashMap.newKeySet();
     private static CuratorFramework zkClient;
 
-    private CuratorUtils() {
+    private CuratorUtil() {
     }
 
     public static void createPersistentNode(CuratorFramework zkClient, String path) {
@@ -74,15 +73,7 @@ public class CuratorUtils {
     }
 
     public static CuratorFramework getZkClient() {
-        Properties rpcConfigPath = PropertiesFileUtil.readPropertiesFile(RpcConfig.RPC_CONFIG_PATH);
-        Properties zkAddress =  PropertiesFileUtil.readPropertiesFile(RpcConfig.ZK_ADDRESS);
-
-        String zooKeeperAddress = "";
-        if (Optional.ofNullable(rpcConfigPath).isPresent() && Optional.ofNullable(zkAddress).isPresent()) {
-            zooKeeperAddress = zkAddress.toString();
-        } else {
-            zooKeeperAddress = ZkConfig.DEFAULT_ZK_ADDRESS;
-        }
+        String zooKeeperAddress = ZkConfig.zkAddress;
 
         log.info("Connecting to zookeeper server: [{}]", zooKeeperAddress);
 

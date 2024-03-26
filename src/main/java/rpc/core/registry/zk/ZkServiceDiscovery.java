@@ -5,10 +5,10 @@ import org.apache.curator.framework.CuratorFramework;
 import rpc.common.configs.ZkConfig;
 import rpc.common.enums.RpcExceptionEnum;
 import rpc.common.exception.RpcException;
-import rpc.common.extension.ExtensionLoader;
+import rpc.core.extension.ExtensionLoader;
 import rpc.core.loadbalance.LoadBalance;
 import rpc.core.registry.ServiceDiscovery;
-import rpc.core.registry.zk.util.CuratorUtils;
+import rpc.common.utils.CuratorUtil;
 import rpc.core.remoting.dtos.RpcRequest;
 
 import java.net.InetSocketAddress;
@@ -21,14 +21,14 @@ public class ZkServiceDiscovery implements ServiceDiscovery {
     private final LoadBalance loadBalance;
 
     public ZkServiceDiscovery() {
-        this.loadBalance = ExtensionLoader.getExtensionLoader(LoadBalance.class).getExtension(ZkConfig.LOAD_BALANCE);
+        this.loadBalance = ExtensionLoader.getExtensionLoader(LoadBalance.class).getExtension(ZkConfig.loadBalance);
     }
 
     @Override
     public InetSocketAddress lookupService(RpcRequest rpcRequest) {
         String rpcServiceName = rpcRequest.getRpcServiceName();
-        CuratorFramework zkClient = CuratorUtils.getZkClient();
-        List<String> serviceUrlList = CuratorUtils.getChildrenNodes(zkClient, rpcServiceName);
+        CuratorFramework zkClient = CuratorUtil.getZkClient();
+        List<String> serviceUrlList = CuratorUtil.getChildrenNodes(zkClient, rpcServiceName);
 
         if (!Optional.ofNullable(serviceUrlList).isPresent() || serviceUrlList.isEmpty()) {
             throw new RpcException(RpcExceptionEnum.SERVICE_CAN_NOT_BE_FOUND, rpcServiceName);

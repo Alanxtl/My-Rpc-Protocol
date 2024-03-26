@@ -1,4 +1,5 @@
-package rpc.test.targetClasses;
+package targetClasses;
+
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -7,10 +8,10 @@ public class ClassTransferTestImpl implements ClassTransferTest {
 
     @Override
     public ClassOut testTransferClass(ClassIn in) {
-        log.info("ClassTransferTestImpl收到: {}.", in.toString());
+        System.out.printf("ClassTransferTestImpl收到: {}. \n", in.toString());
         ClassOut out = new ClassOut();
         out.setOut(in.getIn());
-        log.info("ClassTransferTestImpl返回: {}.", out);
+        System.out.printf("ClassTransferTestImpl返回: {}. \n", out);
         return out;
     }
 }

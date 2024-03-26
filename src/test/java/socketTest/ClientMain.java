@@ -1,10 +1,10 @@
-package rpc.test.socketTest;
+package socketTest;
 
 import rpc.core.provider.TargetRpcService;
 import rpc.core.proxy.RpcClientProxy;
 import rpc.core.remoting.transport.RpcRequestTransport;
 import rpc.core.remoting.transport.socket.SocketRpcClient;
-import rpc.test.targetClasses.*;
+import targetClasses.*;
 
 public class ClientMain {
 

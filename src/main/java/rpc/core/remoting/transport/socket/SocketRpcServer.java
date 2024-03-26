@@ -4,6 +4,7 @@ package rpc.core.remoting.transport.socket;
 import lombok.extern.slf4j.Slf4j;
 import rpc.common.utils.SingletonFactory;
 import rpc.common.utils.ThreadPoolFactoryUtil;
+import rpc.core.handler.SocketRpcRequestHandlerThread;
 import rpc.core.remoting.transport.CustomShutdownHook;
 import rpc.core.provider.TargetRpcService;
 import rpc.core.provider.ServiceProvider;
@@ -17,7 +18,7 @@ import java.net.Socket;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 
-import static rpc.common.configs.RpcConfig.RPC_SERVER_PORT;
+import static rpc.common.configs.RpcConfig.rpcServerPort;
 
 @Slf4j
 public class SocketRpcServer {
@@ -36,7 +37,7 @@ public class SocketRpcServer {
     public void start() {
         try (ServerSocket server = new ServerSocket()) {
             String host = InetAddress.getLocalHost().getHostAddress();
-            server.bind(new InetSocketAddress(host, RPC_SERVER_PORT));
+            server.bind(new InetSocketAddress(host, rpcServerPort));
             SingletonFactory.getSingleton(CustomShutdownHook.class).clearAll();
             Socket socket;
             while (Optional.ofNullable(socket = server.accept()).isPresent()) {

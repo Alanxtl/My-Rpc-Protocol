@@ -3,7 +3,7 @@ package rpc.core.remoting.transport;
 import lombok.extern.slf4j.Slf4j;
 import rpc.common.configs.RpcConfig;
 import rpc.common.utils.ThreadPoolFactoryUtil;
-import rpc.core.registry.zk.util.CuratorUtils;
+import rpc.common.utils.CuratorUtil;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -19,8 +19,8 @@ public class CustomShutdownHook {
         log.info("Clearing all shutdown hook.");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
-                InetSocketAddress inetSocketAddress = new InetSocketAddress(InetAddress.getLocalHost().getHostAddress(), RpcConfig.RPC_SERVER_PORT);
-                CuratorUtils.clearRegistry(CuratorUtils.getZkClient(), inetSocketAddress);
+                InetSocketAddress inetSocketAddress = new InetSocketAddress(InetAddress.getLocalHost().getHostAddress(), RpcConfig.rpcServerPort);
+                CuratorUtil.clearRegistry(CuratorUtil.getZkClient(), inetSocketAddress);
             } catch (UnknownHostException ignored) {
 
             }

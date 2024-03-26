@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import rpc.common.configs.ZkConfig;
 import rpc.common.enums.RpcExceptionEnum;
 import rpc.common.exception.RpcException;
-import rpc.common.extension.ExtensionLoader;
+import rpc.core.extension.ExtensionLoader;
 import rpc.core.provider.TargetRpcService;
 import rpc.core.provider.ServiceProvider;
 import rpc.core.registry.ServiceRegistry;
@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static rpc.common.configs.RpcConfig.RPC_SERVER_PORT;
+import static rpc.common.configs.RpcConfig.rpcServerPort;
 
 @Slf4j
 public class ZkServiceProvider implements ServiceProvider {
@@ -29,7 +29,7 @@ public class ZkServiceProvider implements ServiceProvider {
     public ZkServiceProvider() {
         serviceMap = new ConcurrentHashMap<>();
         registeredService = ConcurrentHashMap.newKeySet();
-        serviceRegistry = ExtensionLoader.getExtensionLoader(ServiceRegistry.class).getExtension(ZkConfig.ZK_SERVICE_PROVIDER);
+        serviceRegistry = ExtensionLoader.getExtensionLoader(ServiceRegistry.class).getExtension(ZkConfig.zkServiceProvider);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class ZkServiceProvider implements ServiceProvider {
         try {
             String host = InetAddress.getLocalHost().getHostAddress();
             this.addService(targetRpcService);
-            serviceRegistry.registerService(targetRpcService.getRpcServiceName(), new InetSocketAddress(host, RPC_SERVER_PORT));
+            serviceRegistry.registerService(targetRpcService.getRpcServiceName(), new InetSocketAddress(host, rpcServerPort));
         } catch (UnknownHostException e) {
             log.error("Cannot get host address", e);
         }

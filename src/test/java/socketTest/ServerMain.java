@@ -1,10 +1,10 @@
-package rpc.test.socketTest;
+package socketTest;
 
 import lombok.extern.slf4j.Slf4j;
 import rpc.core.provider.TargetRpcService;
 import rpc.core.remoting.transport.socket.SocketRpcServer;
-import rpc.test.targetClasses.HelloService2Impl;
-import rpc.test.targetClasses.ClassTransferTestImpl;
+import targetClasses.HelloService2Impl;
+import targetClasses.ClassTransferTestImpl;
 
 
 @Slf4j
