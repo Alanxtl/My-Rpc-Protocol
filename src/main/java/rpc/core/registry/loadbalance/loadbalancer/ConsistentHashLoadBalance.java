@@ -1,6 +1,6 @@
-package rpc.core.loadbalance.loadbalancer;
+package rpc.core.registry.loadbalance.loadbalancer;
 
-import rpc.core.loadbalance.LoadBalance;
+import rpc.core.registry.loadbalance.LoadBalance;
 import rpc.core.remoting.dtos.RpcRequest;
 
 import java.nio.charset.StandardCharsets;

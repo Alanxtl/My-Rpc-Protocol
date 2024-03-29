@@ -1,4 +1,4 @@
-package rpc.core.loadbalance;
+package rpc.core.registry.loadbalance;
 
 import rpc.core.extension.SPI;
 import rpc.core.remoting.dtos.RpcRequest;

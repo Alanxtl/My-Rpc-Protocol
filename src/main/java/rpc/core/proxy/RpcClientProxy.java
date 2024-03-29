@@ -3,7 +3,7 @@ package rpc.core.proxy;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import rpc.common.enums.RpcExceptionEnum;
-import rpc.common.exception.RpcException;
+import rpc.common.exceptions.RpcException;
 import rpc.core.provider.TargetRpcService;
 import rpc.core.remoting.dtos.RpcRequest;
 import rpc.core.remoting.dtos.RpcResponse;

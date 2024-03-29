@@ -3,7 +3,7 @@ package rpc.core.provider.zk;
 import lombok.extern.slf4j.Slf4j;
 import rpc.common.configs.ZkConfig;
 import rpc.common.enums.RpcExceptionEnum;
-import rpc.common.exception.RpcException;
+import rpc.common.exceptions.RpcException;
 import rpc.core.extension.ExtensionLoader;
 import rpc.core.provider.TargetRpcService;
 import rpc.core.provider.ServiceProvider;

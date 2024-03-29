@@ -1,7 +1,7 @@
 package rpc.core.handler;
 
 import lombok.extern.slf4j.Slf4j;
-import rpc.common.exception.RpcException;
+import rpc.common.exceptions.RpcException;
 import rpc.common.utils.SingletonFactory;
 import rpc.core.provider.ServiceProvider;
 import rpc.core.provider.zk.ZkServiceProvider;
@@ -12,11 +12,8 @@ import java.lang.reflect.Method;
 
 @Slf4j
 public class RpcRequestHandler {
-    private final ServiceProvider serviceProvider;
 
-    public RpcRequestHandler() {
-        this.serviceProvider = SingletonFactory.getSingleton(ZkServiceProvider.class);
-    }
+    private static final ServiceProvider serviceProvider = SingletonFactory.getSingleton(ZkServiceProvider.class);
 
     public Object handle(RpcRequest rpcRequest) {
         Object service = serviceProvider.getService(rpcRequest.getRpcServiceName());

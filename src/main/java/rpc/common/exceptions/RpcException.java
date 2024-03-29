@@ -1,4 +1,4 @@
-package rpc.common.exception;
+package rpc.common.exceptions;
 
 import rpc.common.enums.RpcExceptionEnum;
 

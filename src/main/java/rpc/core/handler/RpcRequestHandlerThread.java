@@ -1,12 +1,9 @@
 package rpc.core.handler;
 
 import lombok.extern.slf4j.Slf4j;
-import rpc.common.configs.RpcConfig;
-import rpc.core.extension.ExtensionLoader;
 import rpc.common.utils.SingletonFactory;
 import rpc.core.remoting.dtos.RpcRequest;
 import rpc.core.remoting.dtos.RpcResponse;
-import rpc.core.serialize.Serializer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,11 +11,11 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 @Slf4j
-public class SocketRpcRequestHandlerThread implements Runnable {
+public class RpcRequestHandlerThread implements Runnable {
     private final Socket socket;
     private final RpcRequestHandler rpcRequestHandler;
 
-    public SocketRpcRequestHandlerThread(Socket socket) {
+    public RpcRequestHandlerThread(Socket socket) {
         this.socket = socket;
         this.rpcRequestHandler = SingletonFactory.getSingleton(RpcRequestHandler.class);
     }

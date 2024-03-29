@@ -22,6 +22,11 @@ public class ThreadPoolFactoryUtil {
         return createCustomThreadPoolIfAbsent(threadName, workQueue, false);
     }
 
+    /**
+     *
+     * @param threadName 线程名称
+     * @param workQueue 指定线程池使用的阻塞队列
+     */
     public static ExecutorService createCustomThreadPoolIfAbsent(String threadName, BlockingQueue<Runnable> workQueue) {
         return createCustomThreadPoolIfAbsent(threadName, workQueue, false);
     }

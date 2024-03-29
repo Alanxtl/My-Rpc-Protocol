@@ -4,7 +4,7 @@ package rpc.core.remoting.transport.socket;
 import lombok.extern.slf4j.Slf4j;
 import rpc.common.utils.SingletonFactory;
 import rpc.common.utils.ThreadPoolFactoryUtil;
-import rpc.core.handler.SocketRpcRequestHandlerThread;
+import rpc.core.handler.RpcRequestHandlerThread;
 import rpc.core.remoting.transport.CustomShutdownHook;
 import rpc.core.provider.TargetRpcService;
 import rpc.core.provider.ServiceProvider;
@@ -42,7 +42,7 @@ public class SocketRpcServer {
             Socket socket;
             while (Optional.ofNullable(socket = server.accept()).isPresent()) {
                 log.info("Client [{}] connected", socket.getInetAddress());
-                threadPoll.execute(new SocketRpcRequestHandlerThread(socket));
+                threadPoll.execute(new RpcRequestHandlerThread(socket));
             }
             threadPoll.shutdown();
         } catch (IOException e) {

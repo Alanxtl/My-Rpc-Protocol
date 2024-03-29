@@ -7,29 +7,31 @@
   5. Implementation of the heartbeat mechanism to ensure stable connections.
   6. Customized message, avoiding packet concatenation and half packet.
 
-## Prerequisits
+## Prerequisites
 
-1. Install Docker on you computer first.
-2. Pull Zookeeper on the docker hub.
-  ```bash
-  docker pull zookeeper:3.5.8
-  ```
-3. This repoistory is developed using Intellij IDEA, not tested with other IDEs.
-4. This repoistory is coded with Lombok annotations, users need to install Lombok plugin to compile successfully.
+1. Java 1.8
+2. Install Docker on you computer first.
+3. Pull Zookeeper on the docker hub.
+    ```bash
+    docker pull zookeeper:3.5.8
+    ```
+4. This repository is developed using Intellij IDEA, not tested with other IDEs.
+5. This repository is coded with Lombok annotations, users need to install Lombok plugin to compile successfully.
 
 ## Demonstration
 
-1. Users can edit configs or add services in path ```src/main/resources/```.
-2. Start Zookeeper service, default port: 2181.
-  ```bash
-  docker run -d --name zookeeper -p 2181:2181 zookeeper:3.5.8
-  ```
-3. Users can run the test codes in path ```src/test/java```.
-* Run ```socketTest.ServerMain``` first.
-* Run ```socketTest.ClientMain``` afterwords.
+1. Add```src/main/resources```into your IDE's classpath.
+2. Users can edit configs or add services in path ```src/main/resources/```.
+3. Start Zookeeper service, default port: 2181.
+    ```bash
+    docker run -d --name zookeeper -p 2181:2181 zookeeper:3.5.8
+    ```
+4. Users can run the test codes in path ```src/test/java```.
+* Compile and run ```socketTest.ServerMain``` first.
+* Compile and run ```socketTest.ClientMain``` afterwords.
 * If it runs properly you can see the result in the output。
 
-## How to use the project in you code
+## How to use the project in your code
 
 Server-Side (Service Provider)
 ```java
