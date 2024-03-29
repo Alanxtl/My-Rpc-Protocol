@@ -12,7 +12,9 @@ public enum RpcExceptionEnum {
     SERVICE_INVOCATION_FAILURE("Service invoke failed "),
     SERVICE_CAN_NOT_BE_FOUND("The corresponding service cannot be found "),
     SERVICE_NOT_IMPLEMENT_ANY_INTERFACE("Registered service does not implement any interface "),
-    REQUEST_NOT_MATCH_RESPONSE("The type of the request is not consistent with the type of the response "),;
+    REQUEST_NOT_MATCH_RESPONSE("The type of the request is not consistent with the type of the response "),
+    SERVER_BUSY("The server is busy, the request has been dropped "),
+    ILLEGAL_MESSAGE_TYPE("Incoming message has a illegal message type ");
 
     private final String message;
 

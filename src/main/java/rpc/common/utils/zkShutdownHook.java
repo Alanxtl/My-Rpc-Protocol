@@ -1,4 +1,4 @@
-package rpc.core.remoting.transport;
+package rpc.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import rpc.common.configs.RpcConfig;
@@ -9,14 +9,14 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 
+/**
+ * 若需使用此工具，请使用SingletonFactory获取单例。
+ */
 @Slf4j
-public class CustomShutdownHook {
-    // 单例通过SingletonFactory获取
-    public CustomShutdownHook() {
-    }
-
+public class zkShutdownHook {
+    private zkShutdownHook() {}
     public void clearAll() {
-        log.info("Clearing all shutdown hook.");
+        log.info("Clearing existing zookeeper registry.");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
                 InetSocketAddress inetSocketAddress = new InetSocketAddress(InetAddress.getLocalHost().getHostAddress(), RpcConfig.rpcServerPort);

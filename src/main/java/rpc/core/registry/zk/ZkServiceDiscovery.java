@@ -6,7 +6,7 @@ import rpc.common.configs.ZkConfig;
 import rpc.common.enums.RpcExceptionEnum;
 import rpc.common.exceptions.RpcException;
 import rpc.core.extension.ExtensionLoader;
-import rpc.core.registry.loadbalance.LoadBalance;
+import rpc.core.loadbalance.LoadBalance;
 import rpc.core.registry.ServiceDiscovery;
 import rpc.common.utils.CuratorUtil;
 import rpc.core.remoting.dtos.RpcRequest;

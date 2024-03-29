@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import rpc.common.utils.SingletonFactory;
 import rpc.common.utils.ThreadPoolFactoryUtil;
 import rpc.core.handler.RpcRequestHandlerThread;
-import rpc.core.remoting.transport.CustomShutdownHook;
+import rpc.common.utils.zkShutdownHook;
 import rpc.core.provider.TargetRpcService;
 import rpc.core.provider.ServiceProvider;
 import rpc.core.provider.zk.ZkServiceProvider;
@@ -38,7 +38,7 @@ public class SocketRpcServer {
         try (ServerSocket server = new ServerSocket()) {
             String host = InetAddress.getLocalHost().getHostAddress();
             server.bind(new InetSocketAddress(host, rpcServerPort));
-            SingletonFactory.getSingleton(CustomShutdownHook.class).clearAll();
+            SingletonFactory.getSingleton(zkShutdownHook.class).clearAll();
             Socket socket;
             while (Optional.ofNullable(socket = server.accept()).isPresent()) {
                 log.info("Client [{}] connected", socket.getInetAddress());

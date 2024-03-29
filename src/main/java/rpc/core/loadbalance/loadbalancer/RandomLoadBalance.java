@@ -1,6 +1,6 @@
-package rpc.core.registry.loadbalance.loadbalancer;
+package rpc.core.loadbalance.loadbalancer;
 
-import rpc.core.registry.loadbalance.LoadBalance;
+import rpc.core.loadbalance.LoadBalance;
 import rpc.core.remoting.dtos.RpcRequest;
 
 import java.util.List;
