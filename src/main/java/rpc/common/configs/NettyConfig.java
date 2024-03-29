@@ -1,21 +1,16 @@
 package rpc.common.configs;
 
 import rpc.common.enums.extensionEnums.CompressExtensionEnum;
-import rpc.common.enums.extensionEnums.SerializerExtensionEnum;
 
-import javax.xml.bind.annotation.XmlType;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class NettyConfig {
 
     private static final byte DEFAULT_COMPRESS_TYPE = CompressExtensionEnum.GZIP.getCode();
-    private static final byte DEFAULT_SERIALIZER_TYPE = SerializerExtensionEnum.PROTOSTUFF.getCode();
-
-    /**
-     * 用以验证RpcMessage的魔数
-     */
+    private static final byte DEFAULT_SERIALIZER_TYPE = RpcConfig.serializerType;
     public static final byte[] MAGIC_NUMBER = {(byte) 'A', (byte) 'l', (byte) 'a', (byte) 'n'};
     public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     public static final byte VERSION = 1;
@@ -28,22 +23,23 @@ public class NettyConfig {
     public static byte serializerType = DEFAULT_SERIALIZER_TYPE;
 
     static {
-        ResourceBundle rb = ResourceBundle.getBundle("nettyConfig");
-        for (String key : rb.keySet()) {
-            String value = rb.getString(key);
+        try {
+            ResourceBundle rb = ResourceBundle.getBundle("nettyConfig");
+            for (String key : rb.keySet()) {
+                String value = rb.getString(key);
 
-            switch (key) {
-                case "compressType":
-                    compressType = Byte.parseByte(value);
-                    break;
-                case "serializerType":
-                    serializerType = Byte.parseByte(value);
-                    break;
-                default:
-                    throw new RuntimeException("Unknown config item [" + key + "] in [" + rb.getBaseBundleName() + "].");
+                switch (key) {
+                    case "compressType":
+                        compressType = Byte.parseByte(value);
+                        break;
+                    case "serializerType":
+                        serializerType = Byte.parseByte(value);
+                        break;
+                    default:
+                        throw new RuntimeException("Unknown config item [" + key + "] in [" + rb.getBaseBundleName() + "].");
+                }
             }
-
-        }
+        } catch (MissingResourceException ignored) {}
     }
 
 }

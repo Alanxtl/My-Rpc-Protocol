@@ -2,6 +2,7 @@ package rpc.common.configs;
 
 import lombok.Data;
 
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
@@ -22,28 +23,30 @@ public class ThreadPoolConfig {
 
     static {
 
-        ResourceBundle rb = ResourceBundle.getBundle("threadPoolConfig");
-        for (String key : rb.keySet()) {
-            String value = rb.getString(key);
+        try {
+            ResourceBundle rb = ResourceBundle.getBundle("threadPoolConfig");
+            for (String key : rb.keySet()) {
+                String value = rb.getString(key);
 
-            switch (key) {
-                case "corePoolSize":
-                    corePoolSize = Integer.parseInt(value);
-                    break;
-                case "maximumPoolSize":
-                    maximumPoolSize = Integer.parseInt(value);
-                    break;
-                case "keepAliveTime":
-                    keepAliveTime = Long.parseLong(value);
-                    break;
-                case "unit":
-                    unit = TimeUnit.valueOf(value);
-                    break;
-                default:
-                    throw new RuntimeException("Unknown config item [" + key + "] in [" + rb.getBaseBundleName() + "].");
+                switch (key) {
+                    case "corePoolSize":
+                        corePoolSize = Integer.parseInt(value);
+                        break;
+                    case "maximumPoolSize":
+                        maximumPoolSize = Integer.parseInt(value);
+                        break;
+                    case "keepAliveTime":
+                        keepAliveTime = Long.parseLong(value);
+                        break;
+                    case "unit":
+                        unit = TimeUnit.valueOf(value);
+                        break;
+                    default:
+                        throw new RuntimeException("Unknown config item [" + key + "] in [" + rb.getBaseBundleName() + "].");
+                }
+
             }
-
-        }
+        } catch (MissingResourceException ignored) {}
 
     }
 
