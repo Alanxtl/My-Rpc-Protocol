@@ -14,13 +14,13 @@ import lombok.extern.slf4j.Slf4j;
 import rpc.common.configs.RpcConfig;
 import rpc.common.utils.SingletonFactory;
 import rpc.common.utils.ThreadPoolUtil;
-import rpc.core.handler.NettyRpcRequestHandler;
+import rpc.core.handler.netty.NettyRpcServerHandler;
 import rpc.core.provider.TargetRpcService;
 import rpc.core.provider.ServiceProvider;
 import rpc.core.provider.zk.ZkServiceProvider;
 import rpc.common.utils.zkShutdownHook;
-import rpc.core.remoting.transport.netty.coder.RpcMessageDecoder;
-import rpc.core.remoting.transport.netty.coder.RpcMessageEncoder;
+import rpc.core.remoting.coder.RpcMessageDecoder;
+import rpc.core.remoting.coder.RpcMessageEncoder;
 
 import java.net.InetAddress;
 import java.util.concurrent.TimeUnit;
@@ -58,10 +58,11 @@ public class NettyRpcServer {
                         @Override
                         protected void initChannel(SocketChannel sh) {
                             ChannelPipeline p = sh.pipeline();
+                            // 读超时，30秒未接收到信息会触发 NettyRpcServerHandler.userEventTriggered 方法，关闭ChannelHandlerContext
                             p.addLast(new IdleStateHandler(30, 0, 0, TimeUnit.SECONDS));
                             p.addLast(new RpcMessageEncoder());
                             p.addLast(new RpcMessageDecoder());
-                            p.addLast(serviceHandlerGroup, new NettyRpcRequestHandler());
+                            p.addLast(serviceHandlerGroup, new NettyRpcServerHandler());
                         }
                     });
             ChannelFuture f = b.bind(InetAddress.getLocalHost().getHostAddress(), RpcConfig.rpcServerPort).sync();
