@@ -3,7 +3,7 @@ package rpc.core.remoting.transport.socket;
 
 import lombok.extern.slf4j.Slf4j;
 import rpc.common.utils.SingletonFactory;
-import rpc.common.utils.ThreadPoolFactoryUtil;
+import rpc.common.utils.ThreadPoolUtil;
 import rpc.core.handler.RpcRequestHandlerThread;
 import rpc.common.utils.zkShutdownHook;
 import rpc.core.provider.TargetRpcService;
@@ -22,11 +22,19 @@ import static rpc.common.configs.RpcConfig.rpcServerPort;
 
 @Slf4j
 public class SocketRpcServer {
-    private final ExecutorService threadPoll;
+//    private final ExecutorService threadPoll;
+    private final String threadPoolName;
     private final ServiceProvider serviceProvider;
 
     public SocketRpcServer() {
-        this.threadPoll = ThreadPoolFactoryUtil.createCustomThreadPoolIfAbsent("socket-server-rpc-pool");
+        this.threadPoolName = "socket-server-rpc-pool";
+        ThreadPoolUtil.createCustomThreadPoolIfAbsent(this.threadPoolName);
+        this.serviceProvider = SingletonFactory.getSingleton(ZkServiceProvider.class);
+    }
+
+    public SocketRpcServer(String threadPoolName) {
+        this.threadPoolName = threadPoolName;
+        ThreadPoolUtil.createCustomThreadPoolIfAbsent(this.threadPoolName);
         this.serviceProvider = SingletonFactory.getSingleton(ZkServiceProvider.class);
     }
 
@@ -42,9 +50,9 @@ public class SocketRpcServer {
             Socket socket;
             while (Optional.ofNullable(socket = server.accept()).isPresent()) {
                 log.info("Client [{}] connected", socket.getInetAddress());
-                threadPoll.execute(new RpcRequestHandlerThread(socket));
+                ThreadPoolUtil.execute(threadPoolName, new RpcRequestHandlerThread(socket));
             }
-            threadPoll.shutdown();
+            ThreadPoolUtil.shutDown(threadPoolName);
         } catch (IOException e) {
             log.error("Caught IOException when starting rpc server:", e);
         }

@@ -2,8 +2,6 @@ package rpc.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import rpc.common.configs.RpcConfig;
-import rpc.common.utils.ThreadPoolFactoryUtil;
-import rpc.common.utils.CuratorUtil;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -24,7 +22,7 @@ public class zkShutdownHook {
             } catch (UnknownHostException ignored) {
 
             }
-            ThreadPoolFactoryUtil.shutDownAllThreadPool();
+            ThreadPoolUtil.shutDownAllThreadPool();
         }));
     }
 

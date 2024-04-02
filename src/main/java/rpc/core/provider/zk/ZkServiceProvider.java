@@ -1,7 +1,7 @@
 package rpc.core.provider.zk;
 
 import lombok.extern.slf4j.Slf4j;
-import rpc.common.configs.ZkConfig;
+import rpc.common.configs.RpcConfig;
 import rpc.common.enums.RpcExceptionEnum;
 import rpc.common.exceptions.RpcException;
 import rpc.core.extension.ExtensionLoader;
@@ -29,7 +29,7 @@ public class ZkServiceProvider implements ServiceProvider {
     public ZkServiceProvider() {
         serviceMap = new ConcurrentHashMap<>();
         registeredService = ConcurrentHashMap.newKeySet();
-        serviceRegistry = ExtensionLoader.getExtensionLoader(ServiceRegistry.class).getExtension(ZkConfig.zkServiceProvider);
+        serviceRegistry = ExtensionLoader.getExtensionLoader(ServiceRegistry.class).getExtension(RpcConfig.serviceProvider);
     }
 
     @Override
