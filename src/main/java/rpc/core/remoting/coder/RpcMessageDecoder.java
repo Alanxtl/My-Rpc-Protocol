@@ -1,4 +1,4 @@
-package rpc.core.remoting.transport.netty.coder;
+package rpc.core.remoting.coder;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
