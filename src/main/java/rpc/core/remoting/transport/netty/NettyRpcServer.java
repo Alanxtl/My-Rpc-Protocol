@@ -13,7 +13,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import rpc.common.configs.RpcConfig;
 import rpc.common.utils.SingletonFactory;
-import rpc.common.utils.ThreadPoolFactoryUtil;
+import rpc.common.utils.ThreadPoolUtil;
 import rpc.core.handler.NettyRpcRequestHandler;
 import rpc.core.provider.TargetRpcService;
 import rpc.core.provider.ServiceProvider;
@@ -43,7 +43,7 @@ public class NettyRpcServer {
 
         DefaultEventExecutorGroup serviceHandlerGroup = new DefaultEventExecutorGroup(
                 Runtime.getRuntime().availableProcessors() * 2,
-                ThreadPoolFactoryUtil.createThreadFactory("service-handler-group", false)
+                ThreadPoolUtil.createThreadFactory("service-handler-group", false)
         );
 
         try {
