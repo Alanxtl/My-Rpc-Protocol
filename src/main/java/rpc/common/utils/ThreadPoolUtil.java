@@ -11,14 +11,44 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 
 @Slf4j
-public class ThreadPoolFactoryUtil {
+public class ThreadPoolUtil {
     private static final Map<String, ExecutorService> THREAD_POOLS = new ConcurrentHashMap<>();
 
-    private ThreadPoolFactoryUtil() {
+    private ThreadPoolUtil() {
+    }
+
+    public static void execute(String threadPoolName, Runnable rpcRequestHandlerThread) {
+        getThreadPool(threadPoolName).execute(rpcRequestHandlerThread);
+    }
+
+    public static boolean shutDown(String threadPoolName) {
+        AtomicBoolean check = new AtomicBoolean(false);
+
+        ExecutorService executorService = getThreadPool(threadPoolName);
+        executorService.shutdown();
+
+        try {
+            check.set(executorService.awaitTermination(10, TimeUnit.SECONDS));
+            if ( check.get() ) {
+                executorService.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executorService.shutdownNow();
+            log.error("Cannot shutdown thread pool [{}]", threadPoolName);
+        }
+
+        log.info("Shut down thread pool [{}] [{}]", threadPoolName, executorService.isTerminated());
+        check.set(executorService.isShutdown());
+
+        return check.get();
+    }
+
+    public static ExecutorService getThreadPool(String threadName) {
+        return THREAD_POOLS.get(threadName);
     }
 
     public static ExecutorService createCustomThreadPoolIfAbsent(String threadName) {
-        BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(ThreadPoolConfig.BLOCKING_QUEUE_CAPACITY);
+        BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(ThreadPoolConfig.blockingQueueSize);
         return createCustomThreadPoolIfAbsent(threadName, workQueue, false);
     }
 
@@ -32,7 +62,7 @@ public class ThreadPoolFactoryUtil {
     }
 
     public static ExecutorService createCustomThreadPoolIfAbsent(String threadName, BlockingQueue<Runnable> workQueue, Boolean daemon) {
-        ExecutorService threadPool = THREAD_POOLS.computeIfAbsent(threadName, k -> createThreadPool(threadName, workQueue, daemon));
+        ExecutorService threadPool = THREAD_POOLS.computeIfAbsent(threadName, key -> createThreadPool(key, workQueue, daemon));
 
         if (threadPool.isShutdown() || threadPool.isTerminated()) {
             THREAD_POOLS.remove(threadName);
@@ -46,19 +76,22 @@ public class ThreadPoolFactoryUtil {
     public static boolean shutDownAllThreadPool() {
         AtomicBoolean check = new AtomicBoolean(true);
 
-        log.info("Calling shutDownAllThreadPool method.");
+        log.info("Shutting down all thread pools.");
         THREAD_POOLS.entrySet().parallelStream().forEach(entry -> {
             ExecutorService executorService = entry.getValue();
             executorService.shutdown();
-            log.info("Shutting down thread pool [{}] [{}]", entry.getKey(), executorService.isTerminated());
 
             try {
-                executorService.awaitTermination(10, TimeUnit.SECONDS);
+                check.set(executorService.awaitTermination(10, TimeUnit.SECONDS));
+                if ( check.get() ) {
+                    executorService.shutdownNow();
+                }
             } catch (InterruptedException e) {
-                log.error("Cannot shutdown thread pool [{}]", entry.getKey());
                 executorService.shutdownNow();
-                check.set(false);
+                log.error("Cannot shutdown thread pool [{}]", entry.getKey());
             }
+
+            log.info("Shut down thread pool [{}] [{}]", entry.getKey(), executorService.isTerminated());
         });
 
         return check.get();
@@ -90,6 +123,8 @@ public class ThreadPoolFactoryUtil {
         scheduledExecutorService.scheduleAtFixedRate(() -> {
             log.info("============Thread pool status============");
             log.info("Thread pool size: [{}]", threadPool.getPoolSize());
+            log.info("Thread pool status: isShutdown: [{}] isTerminating: [{}] isTerminated: [{}]",
+                    threadPool.isShutdown(), threadPool.isTerminating(), threadPool.isTerminated());
             log.info("Active threads: [{}]", threadPool.getActiveCount());
             log.info("Number of tasks: [{}]", threadPool.getCompletedTaskCount());
             log.info("Number of tasks in queue: [{}]", threadPool.getQueue().size());
@@ -106,6 +141,8 @@ public class ThreadPoolFactoryUtil {
         scheduledExecutorService.scheduleAtFixedRate(() -> {
             log.info("============Thread pool status============");
             log.info("Thread pool name: [{}]", threadName);
+            log.info("Thread pool status: isShutdown: [{}] isTerminating: [{}] isTerminated: [{}]",
+                    threadPool.isShutdown(), threadPool.isTerminating(), threadPool.isTerminated());
             log.info("Thread pool size: [{}]", threadPool.getPoolSize());
             log.info("Active threads: [{}]", threadPool.getActiveCount());
             log.info("Number of tasks: [{}]", threadPool.getCompletedTaskCount());
@@ -123,6 +160,8 @@ public class ThreadPoolFactoryUtil {
             ThreadPoolExecutor threadPool = (ThreadPoolExecutor) entry.getValue();
 
             log.info("Thread pool name: [{}]", entry.getKey());
+            log.info("Thread pool status: isShutdown: [{}] isTerminating: [{}] isTerminated: [{}]",
+                    threadPool.isShutdown(), threadPool.isTerminating(), threadPool.isTerminated());
             log.info("Thread pool size: [{}]", threadPool.getPoolSize());
             log.info("Active threads: [{}]", threadPool.getActiveCount());
             log.info("Number of tasks: [{}]", threadPool.getCompletedTaskCount());
@@ -137,13 +176,15 @@ public class ThreadPoolFactoryUtil {
     }
 
     public static void main(String[] args) {
-        ThreadPoolFactoryUtil.createCustomThreadPoolIfAbsent("test");
-        ThreadPoolFactoryUtil.createCustomThreadPoolIfAbsent("test2");
-//        ThreadPoolFactoryUtil.printThreadPoolStatus("test");
-        ThreadPoolFactoryUtil.printAllThreadPoolStatus();
-        ThreadPoolFactoryUtil.shutDownAllThreadPool();
-        ThreadPoolFactoryUtil.printAllThreadPoolStatus();
+        ThreadPoolUtil.createCustomThreadPoolIfAbsent("test");
+        ThreadPoolUtil.createCustomThreadPoolIfAbsent("test2");
+//        ThreadPoolUtil.printThreadPoolStatus("test");
+        ThreadPoolUtil.printAllThreadPoolStatus();
+        ThreadPoolUtil.shutDownAllThreadPool();
+        ThreadPoolUtil.printAllThreadPoolStatus();
 
     }
+
+
 }
 

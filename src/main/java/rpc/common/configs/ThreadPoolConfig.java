@@ -9,17 +9,17 @@ import java.util.concurrent.TimeUnit;
 @Data
 public class ThreadPoolConfig {
 
-    private static final int DEFAULT_CORE_POOL_SIZE = 10;
-    private static final int DEFAULT_MAXIMUM_POOL_SIZE_SIZE = 100;
+    private static final int DEFAULT_CORE_POOL_SIZE = Runtime.getRuntime().availableProcessors();
+    private static final int DEFAULT_MAXIMUM_POOL_SIZE_SIZE = DEFAULT_CORE_POOL_SIZE * 2;
     private static final int DEFAULT_KEEP_ALIVE_TIME = 1;
     private static final TimeUnit DEFAULT_TIME_UNIT = TimeUnit.MINUTES;
-    private static final int DEFAULT_BLOCKING_QUEUE_CAPACITY = 100;
-    public static final int BLOCKING_QUEUE_CAPACITY = 100;
+    private static final int DEFAULT_BLOCKING_QUEUE_SIZE = DEFAULT_CORE_POOL_SIZE;
 
     public static int corePoolSize = DEFAULT_CORE_POOL_SIZE;
     public static int maximumPoolSize = DEFAULT_MAXIMUM_POOL_SIZE_SIZE;
     public static long keepAliveTime = DEFAULT_KEEP_ALIVE_TIME;
     public static TimeUnit unit = DEFAULT_TIME_UNIT;
+    public static int blockingQueueSize = DEFAULT_BLOCKING_QUEUE_SIZE;
 
     static {
 
@@ -40,6 +40,9 @@ public class ThreadPoolConfig {
                         break;
                     case "unit":
                         unit = TimeUnit.valueOf(value);
+                        break;
+                    case "blockingQueueSize":
+                        blockingQueueSize = Integer.parseInt(value);
                         break;
                     default:
                         throw new RuntimeException("Unknown config item [" + key + "] in [" + rb.getBaseBundleName() + "].");
