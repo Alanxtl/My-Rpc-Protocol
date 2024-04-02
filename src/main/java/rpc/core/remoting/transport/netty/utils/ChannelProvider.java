@@ -8,11 +8,11 @@ import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@NoArgsConstructor
 @Slf4j
 public class ChannelProvider {
-
     private final Map<String, Channel> channelMap = new ConcurrentHashMap<>();
+
+    private ChannelProvider() {}
 
     public Channel get(InetSocketAddress inetSocketAddress) {
         String key = inetSocketAddress.toString();
