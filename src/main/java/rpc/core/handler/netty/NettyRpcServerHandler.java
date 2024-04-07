@@ -76,7 +76,7 @@ public class NettyRpcServerHandler extends ChannelInboundHandlerAdapter {
         if ( evt instanceof IdleStateEvent ) {
             IdleState state = ((IdleStateEvent) evt).state();
             if ( state == IdleState.READER_IDLE ) {
-                log.info("Idle check happened, no heart bead received, the connection will be closed");
+                log.info("Idle check happened, no heart beat received, the connection will be closed");
                 ctx.close();
             }
         } else {

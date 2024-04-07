@@ -4,10 +4,10 @@ package rpc.core.remoting.transport.socket;
 import lombok.extern.slf4j.Slf4j;
 import rpc.common.utils.SingletonFactory;
 import rpc.common.utils.ThreadPoolUtil;
-import rpc.core.handler.RpcRequestHandlerThread;
 import rpc.common.utils.zkShutdownHook;
-import rpc.core.provider.TargetRpcService;
+import rpc.core.handler.RpcRequestHandlerThread;
 import rpc.core.provider.ServiceProvider;
+import rpc.core.provider.TargetRpcService;
 import rpc.core.provider.zk.ZkServiceProvider;
 
 import java.io.IOException;
@@ -16,13 +16,12 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
 
 import static rpc.common.configs.RpcConfig.rpcServerPort;
 
 @Slf4j
 public class SocketRpcServer {
-//    private final ExecutorService threadPoll;
+    //    private final ExecutorService threadPoll;
     private final String threadPoolName;
     private final ServiceProvider serviceProvider;
 
@@ -52,9 +51,10 @@ public class SocketRpcServer {
                 log.info("Client [{}] connected", socket.getInetAddress());
                 ThreadPoolUtil.execute(threadPoolName, new RpcRequestHandlerThread(socket));
             }
-            ThreadPoolUtil.shutDown(threadPoolName);
         } catch (IOException e) {
             log.error("Caught IOException when starting rpc server:", e);
+        } finally {
+            ThreadPoolUtil.shutDown(threadPoolName);
         }
     }
 
