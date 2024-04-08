@@ -1,11 +1,12 @@
 # MyRpcProtocol
   This repository build a remote procedure call framework, which contains several highlights:
   1. Use SPI (Service Provider Interface) to enhance the scalability.
-  2. Implemented several internet transport methods, including Socket and Netty.
-  3. Implemented several serialize methods, including Protostuff and jackson.
+  2. Implement several internet transport methods, including Socket and Netty.
+  3. Implement several serialize methods, including Protostuff and jackson.
   4. Use Zookeeper as the register center.
   5. Implementation of the heartbeat mechanism to ensure stable connections.
   6. Customized message protocol, avoid packet concatenation and half packet happen, see ```RpcMessageDecoder/RpcMessageEncoder```.
+  7. Implement consistent hashing algorithm for zookeeper load balancing.
 
 ## Prerequisites
 
