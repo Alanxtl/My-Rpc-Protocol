@@ -6,7 +6,7 @@ import rpc.core.remoting.dtos.RpcRequest;
 import java.util.List;
 import java.util.Optional;
 
-@SPI
+@SPI(messageType = "LoadBalance")
 public interface LoadBalance {
     default String selectServiceAddress(List<String> serviceUrls, RpcRequest rpcRequest) {
         if (!Optional.ofNullable(serviceUrls).isPresent() || serviceUrls.isEmpty()) {

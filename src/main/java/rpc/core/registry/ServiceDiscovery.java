@@ -5,7 +5,7 @@ import rpc.core.remoting.dtos.RpcRequest;
 
 import java.net.InetSocketAddress;
 
-@SPI
+@SPI(messageType = "ServiceDiscovery")
 public interface ServiceDiscovery {
 
     /**

@@ -4,7 +4,7 @@ import rpc.core.extension.SPI;
 
 import java.net.InetSocketAddress;
 
-@SPI
+@SPI(messageType = "ServiceRegistry")
 public interface ServiceRegistry {
 
     /**

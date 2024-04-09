@@ -18,14 +18,13 @@ public class ConsistentHashLoadBalance implements LoadBalance {
         String rpcServiceName = rpcRequest.getRpcServiceName();
         ConstantHashSelector selector = selectors.get(rpcServiceName);
 
-        if ( !Optional.ofNullable(selector).isPresent() || selector.identityHashCode != identityHashCode) {
+        if ( !Optional.ofNullable(selector).isPresent() || selector.identityHashCode != identityHashCode ) {
             selectors.put(rpcServiceName, new ConstantHashSelector(serviceUrls, 160, identityHashCode));
             selector = selectors.get(rpcServiceName);
         }
 
         return selector.select(rpcServiceName + Arrays.stream(rpcRequest.getParameters()));
     }
-
 
     static class ConstantHashSelector {
         private final TreeMap<Long, String> virtualInvokers = new TreeMap<>();
@@ -45,7 +44,6 @@ public class ConsistentHashLoadBalance implements LoadBalance {
                 }
             }
         }
-
 
         static byte[] md5(String key) {
             MessageDigest md;
