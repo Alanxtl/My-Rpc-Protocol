@@ -86,32 +86,34 @@ public class LRUCache<T, R> {
         return node.val;
     }
 
-    public void out() {
+    @Override
+    public String toString () {
         Node<T, R> p = head;
+        StringBuilder sb = new StringBuilder();
         if ( head == null ) {
-            return;
+            return null;
         }
         System.out.print("[");
         do {
-            System.out.print("(" + p.key + ", " + p.val + "), ");
+            sb.append("(")
+                    .append(p.key).append(", ")
+                    .append(p.val).append("), ");
             p = p.next;
         } while (p != null);
-        System.out.println("], head = (" + head.key + ", " + head.val + "), " + "tail = (" + tail.key + ", " + tail.val + ")");
 
+        sb.append("], head = (")
+                .append(head.key).append(", ")
+                .append(head.val).append("), ")
+                .append("tail = (")
+                .append(tail.key).append(", ")
+                .append(tail.val).append(")");
+
+        return sb.toString();
     }
 
 
     public static void main(String[] args) {
-        LRUCache<Integer, Integer> test = new LRUCache<>(2);
-        test.out();
-        test.put(1, 1);
-        test.out();
-        test.put(2, 2);
-        test.out();
-        test.get(1);
-        test.out();
-        test.put(3, 3);
-        test.out();
+
 
     }
 
